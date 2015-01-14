@@ -1,0 +1,106 @@
+\documentclass[10pt]{article}
+
+\usepackage{fullpage}
+\usepackage[margin=1in]{geometry}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{eqparbox}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pgf}
+\usepackage[numbers]{natbib}
+\usepackage{tikz}
+%\usepackage{parskip}
+%\usetikzlibrary{arrows,automata,positioning}
+\usepackage[latin1]{inputenc}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\DeclareGraphicsExtensions{.pdf,.png}
+
+\newtheorem{theorem}{Theorem}[subsection]
+\lstset{basicstyle=\fontsize{7}{7}\linespread{0.2}\color{blue}\ttfamily,breaklines=true}
+%\lstset{language=C}
+%\setlength{\parindent}{0pt}
+%\paperwidth = 600pt
+%\paperheight = 400pt
+\newcommand{\E}{\mathrm{E}}
+
+
+\begin{document}
+
+\begin{center}
+EECS 349 HW Extra Credit, Dec 8, 2014 \\
+Hangbin Li, HLL932
+\end{center}
+
+\section*{Problem 1}
+Please see function ``makedictionary()'' in source code file ``spellchecker.py''.
+
+\section*{Problem 2}
+Please see function ``spamsort()'' in source code file ``spellchecker.py''.
+
+\section*{Problem 3}
+\subsection*{1)}
+\subsubsection*{A)}
+I build the dictionary with following steps.\\
+Step 1. read in all the ham and spam emails.\\
+Step 2. parse the emails into unique words lists.\\
+Step 3. Combine all the lists from ham and spam, find the intersecting words of the two corpus.\\
+Step 4. Calculate the probability that each word appears in ham and spam corpus.\\
+Step 5. Output the result into ``dictionary.txt''.\\
+
+\noindent My rule of dealing with non-alphanumeric is that every legit word can only consist of characters from alphanumerics and hyphen. Other characters are not allowed.\\
+
+\noindent Plurals are considered as separate words.\\
+
+\noindent I didn't allow words with characters other than alphanumerics and hyphen, so some hex characters and html syntax are automatically excluded.\\
+
+\noindent Yes, every word from the training corpus is in the dictionary. Because I examined and found out the dictionary won't exceed $10^5$ words, which will lead to a acceptable speed when being built and used to do categorization.
+
+\subsubsection*{B)}
+I build the spam sorter with following steps.\\
+Step 1. read in all the emails.\\
+Step 2. read in the dictionary file and store it using hash table internally.\\
+Step 3. parse every email into unique word list.\\
+Step 4. calculate the probabilities of spam and ham using the formula (7) provided.\\
+Step 5. compare the probablities of spam and ham, move the email into the class with larger probability, and do it for every email.\\
+
+\noindent Using the formula (7) provided, sum up the log of prior probability and the conditional probability of each unique word in the email.\\
+
+\noindent Proof (6) and (7) are the same thing.\\
+$f(x)=log(x)$ is a monotone increasing function. So 
+\begin{flalign*}
+v_{\textit{NB}} &= \arg\max_{v_j \in V} P(v_j)\prod_i P(a_i | v_j) \\
+                &= \arg\max_{v_j \in V} e^{\log\big(P(v_j)\prod_i P(a_i | v_j)\big)} \\
+                &= \arg\max_{v_j \in V} \Big( \log\big(P(v_j)\prod_i P(a_i | v_j)\big) \Big) \\
+                &= \arg\max_{v_j \in V} \Big( \log\big(P(v_j) \big) + \sum_i \log\big(P(a_i | v_j)\big) \Big)\\
+\end{flalign*}
+i.e., Therefore, (6) and (7) are the same.
+
+\subsection*{2)}
+I used the suggested \textit{20030228\_spam.tar.bz2}, \textit{20021010\_easy\_ham.tar.bz2} files to build the dictionary.\\
+
+\noindent I tested on the combined set of emails of the above spam and ham folders. So they are the same.\\
+
+\noindent Because based on my initial analysis of the text, the data set seems to cover broad topics and is representative.\\
+
+\noindent There are 501 spam mails and 2551 ham mails.\\
+
+\noindent The percentage is 16.415\%.\\
+
+\noindent The percentage might not be representative because according to several reports, in real world the percentage of spam mail is above two thirds. However, I don't think this percentage will largely affect the test of our NB classifier because when the percentage is on the order (10\%-90\%), the NB classifier's mathematically effectiveness isn't large affected by the prior probability.
+
+
+\end{document}
+
